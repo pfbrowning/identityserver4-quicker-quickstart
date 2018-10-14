@@ -70,6 +70,7 @@ namespace IdentityServer
                 .AddInMemoryClients(ClientConfig.GetClients())                         
                 .AddInMemoryIdentityResources(ResourceConfig.GetIdentityResources())
                 .AddInMemoryApiResources(ResourceConfig.GetApiResources())
+                .AddInMemoryPersistedGrants()
                 /* Add our test users alice and bob for demo purposes.  For a production 
                 application we'd obviously want to replace this with a persistent user
                 store, which generally would be implementation-specific. */
