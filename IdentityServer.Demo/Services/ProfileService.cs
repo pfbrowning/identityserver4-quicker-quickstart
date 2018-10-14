@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using IdentityServer4.Models;
 using System.Linq;
 using System.Security.Claims;
-using IdentityServerSample.Extensions;
 
 namespace IdentityServerSample.Services
 {
@@ -17,9 +16,9 @@ namespace IdentityServerSample.Services
             UserClaims configured on the IdentityResources (for id token claims) and
             ApiResources (for access token claims). */
             context.RequestedClaimTypes.ToList().ForEach(requestedClaimKey => {
-                string requestedClaimMatchValue = context.Subject.GetClaimValueByShortName(requestedClaimKey);
-                if(requestedClaimMatchValue != null) {
-                    context.IssuedClaims.Add(new Claim(requestedClaimKey, requestedClaimMatchValue));
+                Claim requestedClaimMatch = context.Subject.FindFirst(requestedClaimKey);
+                if(requestedClaimMatch != null) {
+                    context.IssuedClaims.Add(requestedClaimMatch);
                 }
             });
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -115,6 +116,13 @@ namespace IdentityServer
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            /* "Fix" claim mapping so that claims don't get mapped to Microsoft's legacy proprietary
+            format and, by extension, so that we can process claims using the standard oidc caim types.
+            For further reading:
+            https://leastprivilege.com/2017/11/15/missing-claims-in-the-asp-net-core-2-openid-connect-handler/
+            https://leastprivilege.com/2016/08/21/why-does-my-authorize-attribute-not-work/ */
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             // Add Serilog to the global logging pipeline
             loggerFactory.AddSerilog();
