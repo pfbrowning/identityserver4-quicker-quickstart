@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+/* Use box-sizing:border-box across the board, as per
+https://www.paulirish.com/2012/box-sizing-border-box-ftw/ */
+html {
+    box-sizing: border-box;
+}
+
+.flex-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.flex-column {
+    flex-basis: 100%;
+    max-width: 100%;
+}
+
+@media (min-width:800px) {
+    .flex-column-fourth {
+        flex-basis: 24%;
+        max-width: 24%;
+        padding-right: 1%;
+    }
+}
+
+pre{
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
