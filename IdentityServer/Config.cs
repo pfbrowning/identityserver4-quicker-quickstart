@@ -39,8 +39,8 @@ namespace BL.IS.Sample.Configuration
         {
             return new List<Client> {
                 new Client {
-                    ClientId = "BL.IS.Sample.UI",
-                    ClientName = "Browninglogic IdentityServer4 Sample UI",
+                    ClientId = "IS.Demo.Client",
+                    ClientName = "IdentityServer Demo Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
                     AlwaysIncludeUserClaimsInIdToken = true,
