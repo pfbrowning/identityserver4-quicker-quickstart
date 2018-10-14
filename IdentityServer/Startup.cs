@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IdentityServer4.Models;
+using IdentityServer4.Test;
+using BL.IS.Sample.Configuration;
 
 namespace IdentityServer
 {
@@ -31,6 +34,13 @@ namespace IdentityServer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddIdentityServer()
+                .AddInMemoryClients(Config.GetClients())                         
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddTestUsers(Config.GetUsers())                     
+                .AddDeveloperSigningCredential();
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -47,6 +57,8 @@ namespace IdentityServer
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.UseIdentityServer();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
