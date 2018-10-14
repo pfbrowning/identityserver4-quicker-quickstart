@@ -66,13 +66,13 @@ namespace IdentityServer
                 /* Add statically-generated clients, identity resources, and API resources
                 for our quickstart.  For an important production application we'd probably 
                 want to configure this from a persistent store. */
-                .AddInMemoryClients(Config.GetClients())                         
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(ClientConfig.GetClients())                         
+                .AddInMemoryIdentityResources(ResourceConfig.GetIdentityResources())
+                .AddInMemoryApiResources(ResourceConfig.GetApiResources())
                 /* Add our test users alice and bob for demo purposes.  For a production 
                 application we'd obviously want to replace this with a persistent user
                 store, which generally would be implementation-specific. */
-                .AddTestUsers(Config.GetUsers())
+                .AddTestUsers(TestUsersConfig.GetUsers())
                 /* Use AddDeveloperSigningCredential for debugging only.  When we deploy
                 we should consider using AddSigningCredential. */
                 .AddDeveloperSigningCredential()
