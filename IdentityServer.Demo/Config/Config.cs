@@ -8,22 +8,31 @@ namespace IdentityServerSample.Configuration
 {
     public class Config
     {
-        // scopes define the resources in your system
+        /// <summary>
+        /// Configure an IdentityResource with standard claims
+        /// </summary>
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource> {
+                // OpenId is always required
                 new IdentityResources.OpenId(),
                 new IdentityResources.Email(),
+                /* Profile defines most of the identity claims that we care about, such
+                as first & last name and website. */
                 new IdentityResources.Profile()
             };
         }
 
+        /// <summary>
+        /// Configure sample API access, scopes, and user claims as an ApiResource
+        /// </summary>
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource> {
                 new ApiResource("IdentityServerSample.API", "Sample Api Resource") {
                     Description = "Sample Api Access",
                     
+                    // Include the 'name' user claim in the access token
                     UserClaims = new List<string> {"name"},
                     Scopes = new List<Scope> {
                         new Scope("api", "Sample API Access")
@@ -32,11 +41,15 @@ namespace IdentityServerSample.Configuration
             };
         }
 
-        // clients want to access resources (aka scopes)
+        /// <summary>
+        /// Configure our Angular SPA demo client app as a Client
+        /// </summary>
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client> {
                 new Client {
+                    /* We need to use 'implicit' as a client id in order to use the hosted 
+                    IdentityServer demo as an external provider. */
                     ClientId = "implicit",
                     ClientName = "IdentityServer Demo Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
@@ -46,6 +59,8 @@ namespace IdentityServerSample.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
+                        /* Allow this client to request api access in additon to the 
+                        above standard scopes. */
                         "api"
                     },
                     RedirectUris = new List<string> {

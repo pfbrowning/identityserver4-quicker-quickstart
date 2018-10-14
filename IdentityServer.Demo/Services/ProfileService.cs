@@ -11,6 +11,11 @@ namespace IdentityServerSample.Services
     {
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
+            /* Issue to the id token & access token each requested claim which 
+            exists in the provided ClaimsPrincipal.  RequestedClaimTypes are 
+            determined by the scopes requested by the client along with scopes &
+            UserClaims configured on the IdentityResources (for id token claims) and
+            ApiResources (for access token claims). */
             context.RequestedClaimTypes.ToList().ForEach(requestedClaimKey => {
                 string requestedClaimMatchValue = context.Subject.GetClaimValueByShortName(requestedClaimKey);
                 if(requestedClaimMatchValue != null) {
