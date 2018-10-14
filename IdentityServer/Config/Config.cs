@@ -4,7 +4,7 @@ using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace BL.IS.Sample.Configuration
+namespace IdentityServerSample.Configuration
 {
     public class Config
     {
@@ -15,6 +15,9 @@ namespace BL.IS.Sample.Configuration
                 new IdentityResources.OpenId(),
                 new IdentityResources.Email(),
                 new IdentityResources.Profile(),
+                /* In order to demonstrate requesting identity claims, we'll create an identity-specific profile
+                scope which contains one claim which is only used for identity and one which is used for both
+                the identity token and the access token. */
                 new IdentityResource("identity_token_profile", "Identity Profile", new string[] {"identity_claim", "shared_claim"})
             };
         }
@@ -22,13 +25,17 @@ namespace BL.IS.Sample.Configuration
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource> {
-                new ApiResource("BL.IS.Sample.API", "Sample Api Resource") {
+                new ApiResource("IdentityServerSample.API", "Sample Api Resource") {
                     Description = "Sample Api Access",
                     
+                    /* Request a non-scope-specific User claim for this resource */
                     UserClaims = new List<string> {"resource_user_claim"},
                     Scopes = new List<Scope> {
-                        new Scope("access_token_profile", "User Profile For Access Token", new string[] {"access_claim", "shared_claim"}),
-                        new Scope("Sample_API", "Sample API Access")
+                        new Scope("Sample_API", "Sample API Access"),
+                        /* In order to demostrate requesting access token claims, we'll create an access token
+                        profile scope which contains one clim which is only used for the access token and one which is
+                        used for both the identity token and the access token. */
+                        new Scope("access_token_profile", "User Profile For Access Token", new string[] {"access_claim", "shared_claim"})
                     }
                 }
             };
