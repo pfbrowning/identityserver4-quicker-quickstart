@@ -10,7 +10,11 @@
   <p>You are not authenticated.  Click <a href="javascript:void(0)" (click)="logIn()">here</a> to log in.</p>
 </ng-template>
 <ng-template #authenticated>
-  <h2>Congratulations!  You're authenticated!  Click <a href="javascript:void(0)" (click)="logOut()">here</a> to log out.</h2>
+  <h2>You're authenticated!</h2>
+  <ul>
+    <li><input type="button" value="Log Out" (click)="logOut()" /></li>
+    <li><input type="button" value="Silent Refresh" (click)="silentRefresh()" /></li>
+  </ul>
   <div class="flex-grid">
     <div class="flex-column flex-column-fourth">
       <h3>Identity Token Claims</h3>

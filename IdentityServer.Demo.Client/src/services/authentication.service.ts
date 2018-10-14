@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { OAuthService, OAuthEvent } from 'angular-oauth2-oidc';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -35,6 +35,10 @@ export class AuthenticationService {
 
   public logOut(): void {
     this.oauthService.logOut();
+  }
+
+  public silentRefresh(): Promise<OAuthEvent> {
+    return this.oauthService.silentRefresh();
   }
 
   /** Tells whether the user is currently authenticated with a valid, non-expired tokens */

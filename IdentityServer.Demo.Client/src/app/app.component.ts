@@ -22,6 +22,12 @@ export class AppComponent {
     this.authenticationService.logOut();
   }
 
+  public silentRefresh() {
+    this.authenticationService.silentRefresh()
+      .then(() => alert('Silent Refresh Successful'))
+      .catch(error => alert(`Silent Refresh Failed: ${error.type}`));
+  }
+
   public get identityTokenClaims() : Object {
     return this.authenticationService.idTokenClaims;
   }
