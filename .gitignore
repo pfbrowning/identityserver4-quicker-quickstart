@@ -1,3 +1,3 @@
-IdentityServer/obj/
-IdentityServer/bin/
-UI/node_modules/
+IdentityServer.Demo/obj/
+IdentityServer.Demo/bin/
+IdentityServer.Demo.Client/node_modules/
