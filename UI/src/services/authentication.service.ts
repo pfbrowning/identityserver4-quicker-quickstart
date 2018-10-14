@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { ConfigService } from './config.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -11,7 +10,7 @@ import { authConfig } from '../config/auth.config';
 export class AuthenticationService {
   private readonly _tokenProcessed = new BehaviorSubject<boolean>(false);
 
-  constructor(private oauthService: OAuthService, private configService : ConfigService) {
+  constructor(private oauthService: OAuthService) {
     this.oauthService.configure(authConfig);
     /* Load the configuration from the discovery document and process the provided
     ID token if present.  Afterwards set _tokenProcessed to true so that anybody listening
@@ -34,6 +33,10 @@ export class AuthenticationService {
     this.oauthService.initImplicitFlow();
   }
 
+  public logOut(): void {
+    this.oauthService.logOut();
+  }
+
   /** Tells whether the user is currently authenticated with a valid, non-expired tokens */
   public get authenticated() : boolean {
     return this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken();
@@ -47,5 +50,13 @@ export class AuthenticationService {
   /** ID token expiration as a Javascript date */
   public get idTokenExpiration() : Date {
     return moment(this.oauthService.getIdTokenExpiration()).toDate();
+  }
+
+  public get idTokenClaims() : Object {
+    return this.oauthService.getIdentityClaims();
+  }
+
+  public get accessTokenClaims() : Object {
+    return jwtDecode(this.oauthService.getAccessToken());
   }
 }
