@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -10,6 +11,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     OAuthModule.forRoot()
   ],
   providers: [],
