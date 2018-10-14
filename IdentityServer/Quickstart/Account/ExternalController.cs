@@ -110,6 +110,8 @@ namespace Host.Quickstart.Account
             ProcessLoginCallbackForWsFed(result, additionalLocalClaims, localSignInProps);
             ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
 
+            additionalLocalClaims.AddRange(claims);
+
             // issue authentication cookie for user
             await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.SubjectId, user.Username));
             await HttpContext.SignInAsync(user.SubjectId, user.Username, provider, localSignInProps, additionalLocalClaims.ToArray());
@@ -191,11 +193,10 @@ namespace Host.Quickstart.Account
             // depending on the external provider, some other claim type might be used
             var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
                               externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
+                              externalUser.FindFirst(ClaimTypes.Upn) ??
                               throw new Exception("Unknown userid");
 
-            // remove the user id claim so we don't include it as an extra claim if/when we provision the user
             var claims = externalUser.Claims.ToList();
-            claims.Remove(userIdClaim);
 
             var provider = result.Properties.Items["scheme"];
             var providerUserId = userIdClaim.Value;

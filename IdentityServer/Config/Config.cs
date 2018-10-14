@@ -14,11 +14,7 @@ namespace IdentityServerSample.Configuration
             return new List<IdentityResource> {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Email(),
-                new IdentityResources.Profile(),
-                /* In order to demonstrate requesting identity claims, we'll create an identity-specific profile
-                scope which contains one claim which is only used for identity and one which is used for both
-                the identity token and the access token. */
-                new IdentityResource("identity_token_profile", "Identity Profile", new string[] {"identity_claim", "shared_claim"})
+                new IdentityResources.Profile()
             };
         }
 
@@ -28,14 +24,9 @@ namespace IdentityServerSample.Configuration
                 new ApiResource("IdentityServerSample.API", "Sample Api Resource") {
                     Description = "Sample Api Access",
                     
-                    /* Request a non-scope-specific User claim for this resource */
-                    UserClaims = new List<string> {"resource_user_claim"},
+                    UserClaims = new List<string> {"name"},
                     Scopes = new List<Scope> {
-                        new Scope("Sample_API", "Sample API Access"),
-                        /* In order to demostrate requesting access token claims, we'll create an access token
-                        profile scope which contains one clim which is only used for the access token and one which is
-                        used for both the identity token and the access token. */
-                        new Scope("access_token_profile", "User Profile For Access Token", new string[] {"access_claim", "shared_claim"})
+                        new Scope("api", "Sample API Access")
                     }
                 }
             };
@@ -46,7 +37,7 @@ namespace IdentityServerSample.Configuration
         {
             return new List<Client> {
                 new Client {
-                    ClientId = "IS.Demo.Client",
+                    ClientId = "implicit",
                     ClientName = "IdentityServer Demo Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
@@ -55,16 +46,14 @@ namespace IdentityServerSample.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "identity_token_profile",
-                        "access_token_profile"
+                        "api"
                     },
                     RedirectUris = new List<string> {
                         "http://localhost:4200/index.html",
                         "http://localhost:4200/silent-refresh.html"
                     },
                     PostLogoutRedirectUris = new List<string> {
-                        "http://localhost:4200/index.html",
-                        "http://localhost:4200/silent-refresh.html"
+                        "http://localhost:4200/index.html"
                     }
                 }
             };
