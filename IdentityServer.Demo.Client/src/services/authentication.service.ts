@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OAuthService, OAuthEvent } from 'angular-oauth2-oidc';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, timer } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import { authConfig } from '../config/auth.config';
@@ -11,6 +11,7 @@ export class AuthenticationService {
   private readonly _tokenProcessed = new BehaviorSubject<boolean>(false);
 
   constructor(private oauthService: OAuthService) {
+    // Initialize the oauth service with our auth config settings
     this.oauthService.configure(authConfig);
     /* Load the configuration from the discovery document and process the provided
     ID token if present.  Afterwards set _tokenProcessed to true so that anybody listening
@@ -32,11 +33,11 @@ export class AuthenticationService {
   public initImplicitFlow() : void {
     this.oauthService.initImplicitFlow();
   }
-
   public logOut(): void {
     this.oauthService.logOut();
   }
 
+  /** Explicitly initiate silent refresh */
   public silentRefresh(): Promise<OAuthEvent> {
     return this.oauthService.silentRefresh();
   }
@@ -56,10 +57,12 @@ export class AuthenticationService {
     return moment(this.oauthService.getIdTokenExpiration()).toDate();
   }
 
+  /** Claims included in the id token */
   public get idTokenClaims() : Object {
     return this.oauthService.getIdentityClaims();
   }
 
+  /** Claims included in the access token. */
   public get accessTokenClaims() : Object {
     return jwtDecode(this.oauthService.getAccessToken());
   }

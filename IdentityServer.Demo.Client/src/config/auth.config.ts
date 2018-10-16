@@ -5,9 +5,9 @@ export const authConfig: AuthConfig = {
   issuer: 'https://localhost:5001',
 
   // URL of the SPA to redirect the user to after login
-  redirectUri: window.location.origin + '/index.html',
+  redirectUri: `${window.location.origin}/index.html`,
 
-
+  // URL to be used for the silent refresh callback redirect
   silentRefreshRedirectUri: `${window.location.origin}/silent-refresh.html`,
 
   // The SPA's id. The SPA is registerd with this id at the auth-server
