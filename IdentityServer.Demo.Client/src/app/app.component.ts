@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { LoadingIndicatorService } from '@browninglogic/ng-loading-indicator';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,8 @@ import { AuthenticationService } from 'src/services/authentication.service';
 })
 export class AppComponent {
   title = 'IdentityServer Demo Client';
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(private authenticationService: AuthenticationService,
+    private loadingIndicatorService: LoadingIndicatorService) {}
 
   public get userAuthenticated() : boolean {
     return this.authenticationService.authenticated;
@@ -23,9 +25,12 @@ export class AppComponent {
   }
 
   public silentRefresh() {
+    // Explicitly trigger silent refresh to demonstrate the functionality.
+    this.loadingIndicatorService.showLoadingIndicator("Performing Silent Refresh");
     this.authenticationService.silentRefresh()
       .then(() => alert('Silent Refresh Successful'))
-      .catch(error => alert(`Silent Refresh Failed: ${error.type}`));
+      .catch(error => alert(`Silent Refresh Failed: ${error.type}`))
+      .then(() => this.loadingIndicatorService.hideLoadingIndicator());
   }
 
   public get identityTokenClaims() : Object {
