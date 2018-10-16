@@ -22,15 +22,15 @@ export class AuthenticationService {
   /** Emits once the discovery document has been loaded and the id token has been
    * processed, or immediately if subscribed to after the aforementioned has
    * already occurred. */
-  public tokenProcessed() : Observable<void> {
+  public tokenProcessed(): Observable<void> {
       return this._tokenProcessed.pipe(
-          filter(processed => processed == true),
-          map(() =>null)
-        )
+          filter(processed => processed === true),
+          map(() => null)
+        );
   }
 
   /** Redirects the user to the IdentityServer login page for implicit flow */
-  public initImplicitFlow() : void {
+  public initImplicitFlow(): void {
     this.oauthService.initImplicitFlow();
   }
   public logOut(): void {
@@ -43,27 +43,27 @@ export class AuthenticationService {
   }
 
   /** Tells whether the user is currently authenticated with a valid, non-expired tokens */
-  public get authenticated() : boolean {
+  public get authenticated(): boolean {
     return this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken();
   }
 
   /** Access token expiration as a Javascript date */
-  public get accessTokenExpiration() : Date {
+  public get accessTokenExpiration(): Date {
     return moment(this.oauthService.getAccessTokenExpiration()).toDate();
   }
 
   /** ID token expiration as a Javascript date */
-  public get idTokenExpiration() : Date {
+  public get idTokenExpiration(): Date {
     return moment(this.oauthService.getIdTokenExpiration()).toDate();
   }
 
   /** Claims included in the id token */
-  public get idTokenClaims() : Object {
+  public get idTokenClaims(): Object {
     return this.oauthService.getIdentityClaims();
   }
 
   /** Claims included in the access token. */
-  public get accessTokenClaims() : Object {
+  public get accessTokenClaims(): Object {
     return jwtDecode(this.oauthService.getAccessToken());
   }
 }

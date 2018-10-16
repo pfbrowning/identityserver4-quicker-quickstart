@@ -12,7 +12,7 @@ export class AppComponent {
   constructor(private authenticationService: AuthenticationService,
     private loadingIndicatorService: LoadingIndicatorService) {}
 
-  public get userAuthenticated() : boolean {
+  public get userAuthenticated(): boolean {
     return this.authenticationService.authenticated;
   }
 
@@ -26,18 +26,18 @@ export class AppComponent {
 
   public silentRefresh() {
     // Explicitly trigger silent refresh to demonstrate the functionality.
-    this.loadingIndicatorService.showLoadingIndicator("Performing Silent Refresh");
+    this.loadingIndicatorService.showLoadingIndicator('Performing Silent Refresh');
     this.authenticationService.silentRefresh()
       .then(() => alert('Silent Refresh Successful'))
       .catch(error => alert(`Silent Refresh Failed: ${error.type}`))
       .then(() => this.loadingIndicatorService.hideLoadingIndicator());
   }
 
-  public get identityTokenClaims() : Object {
+  public get identityTokenClaims(): Object {
     return this.authenticationService.idTokenClaims;
   }
 
-  public get accessTokenClaims() : Object {
+  public get accessTokenClaims(): Object {
     return this.authenticationService.accessTokenClaims;
   }
 }

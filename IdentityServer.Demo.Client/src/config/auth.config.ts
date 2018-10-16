@@ -15,4 +15,4 @@ export const authConfig: AuthConfig = {
 
   // set the scope for the permissions the client should request
   scope: 'openid profile email api',
-}
+};
