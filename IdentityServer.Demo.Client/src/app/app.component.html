@@ -28,11 +28,23 @@
   <div class="flex-grid">
     <div class="flex-column flex-column-half">
       <h3>Public Resource</h3>
-      <pre></pre>
+      <ng-container *ngIf="publicResource; then publicResourceFetched else publicResourceNotFetched"></ng-container>
+      <ng-template #publicResourceNotFetched>
+        <input type="button" value="Fetch" (click)="fetchPublicResource()" class="actionButton" />
+      </ng-template>
+      <ng-template #publicResourceFetched>
+        <pre>{{publicResource | json}}</pre>
+      </ng-template>
     </div>
     <div class="flex-column flex-column-half">
       <h3>Protected Resource</h3>
-      <pre></pre>
+      <ng-container *ngIf="protectedResource; then protectedResourceFetched else protectedResourceNotFetched"></ng-container>
+      <ng-template #protectedResourceNotFetched>
+        <input type="button" value="Fetch" (click)="fetchProtectedResource()" class="actionButton" />
+      </ng-template>
+      <ng-template #protectedResourceFetched>
+        <pre>{{protectedResource | json}}</pre>
+      </ng-template>
     </div>
     <div class="flex-column flex-column-half">
       <h3>Identity Token Claims</h3>

@@ -16,7 +16,8 @@ export class AuthenticationService {
     /* Load the configuration from the discovery document and process the provided
     ID token if present.  Afterwards set _tokenProcessed to true so that anybody listening
     to tokenProcessed knows that the token has been processed.*/
-    this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => this._tokenProcessed.next(true));
+    this.oauthService.loadDiscoveryDocumentAndTryLogin()
+      .then(() => this._tokenProcessed.next(true))
   }
 
   /** Emits once the discovery document has been loaded and the id token has been
@@ -60,6 +61,11 @@ export class AuthenticationService {
   /** Claims included in the id token */
   public get idTokenClaims(): Object {
     return this.oauthService.getIdentityClaims();
+  }
+
+  /** Raw access token string */
+  public get accessToken(): string {
+    return this.oauthService.getAccessToken();
   }
 
   /** Claims included in the access token. */

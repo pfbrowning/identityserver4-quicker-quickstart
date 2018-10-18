@@ -115,6 +115,8 @@ namespace IdentityServer
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                
+                app.UseHttpsRedirection();
                 app.UseHsts();
             }
 
@@ -134,7 +136,6 @@ namespace IdentityServer
             // Tell the app to use IdentityServer
             app.UseIdentityServer();
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
