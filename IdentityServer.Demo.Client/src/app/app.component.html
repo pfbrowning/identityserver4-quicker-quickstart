@@ -23,24 +23,7 @@
       <li><input type="button" value="Silent Refresh" (click)="silentRefresh()" /></li>
     </ul>
   </div>
-  <div class="flex-grid">
-    <div class="flex-column flex-column-half">
-      <h3>Identity Token Claims</h3>
-      <pre>{{identityTokenClaims | json}}</pre>
-    </div>
-    <div class="flex-column flex-column-half">
-      <h3>Access Token Claims</h3>
-      <pre>{{accessTokenClaims | json}}</pre>
-    </div>
-    <div class="flex-column flex-column-half">
-      <h3>Identity Token Expiration</h3>
-      <pre>{{identityTokenExpirationInfo | json}}</pre>
-    </div>
-    <div class="flex-column flex-column-half">
-      <h3>Access Token Expiration</h3>
-      <pre>{{accessTokenExpirationInfo | json}}</pre>
-    </div>
-  </div>
+  <oidc-info-display></oidc-info-display>
 </ng-template>
 
 <nli-loading-indicator></nli-loading-indicator>

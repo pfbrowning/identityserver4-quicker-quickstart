@@ -8,11 +8,13 @@ import { NgLoadingIndicatorModule } from '@browninglogic/ng-loading-indicator';
 import { ModalManagerModule } from '@browninglogic/ng-modal';
 import { ErrorWindowComponent } from './components/error-window/error-window.component';
 import { UnhandledErrorCatcher } from './services/unhandled-error-catcher.service';
+import { OidcInfoDisplayComponent } from './components/oidc-info-display/oidc-info-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ErrorWindowComponent
+    ErrorWindowComponent,
+    OidcInfoDisplayComponent
   ],
   imports: [
     BrowserModule,
