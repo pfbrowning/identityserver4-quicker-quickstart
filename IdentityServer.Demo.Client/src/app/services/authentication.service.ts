@@ -11,14 +11,18 @@ import { ErrorHandlingService } from './error-handling.service';
 export class AuthenticationService {
   private readonly _tokenProcessed = new BehaviorSubject<boolean>(false);
 
-  constructor(private oauthService: OAuthService) {
+  constructor(private oauthService: OAuthService, private errorHandlingService: ErrorHandlingService) {
     // Initialize the oauth service with our auth config settings
     this.oauthService.configure(authConfig);
     /* Load the configuration from the discovery document and process the provided
     ID token if present.  Afterwards set _tokenProcessed to true so that anybody listening
     to tokenProcessed knows that the token has been processed.*/
     this.oauthService.loadDiscoveryDocumentAndTryLogin()
-      .then(() => this._tokenProcessed.next(true));
+      .then(() => this._tokenProcessed.next(true))
+      .catch(error => this.errorHandlingService.handleError(error, "Failed to load discovery document: Is your OIDC provider configured and running?"))
+
+    // Configure automatic silent refresh
+    this.oauthService.setupAutomaticSilentRefresh();
   }
 
   /** Emits once the discovery document has been loaded and the id token has been
