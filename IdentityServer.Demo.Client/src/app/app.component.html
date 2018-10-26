@@ -32,6 +32,14 @@
       <h3>Access Token Claims</h3>
       <pre>{{accessTokenClaims | json}}</pre>
     </div>
+    <div class="flex-column flex-column-half">
+      <h3>Identity Token Expiration</h3>
+      <pre>{{identityTokenExpirationInfo | json}}</pre>
+    </div>
+    <div class="flex-column flex-column-half">
+      <h3>Access Token Expiration</h3>
+      <pre>{{accessTokenExpirationInfo | json}}</pre>
+    </div>
   </div>
 </ng-template>
 

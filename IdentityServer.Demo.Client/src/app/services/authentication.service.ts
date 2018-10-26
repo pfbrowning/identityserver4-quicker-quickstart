@@ -53,16 +53,6 @@ export class AuthenticationService {
     return this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken();
   }
 
-  /** Access token expiration as a Javascript date */
-  public get accessTokenExpiration(): Date {
-    return moment(this.oauthService.getAccessTokenExpiration()).toDate();
-  }
-
-  /** ID token expiration as a Javascript date */
-  public get idTokenExpiration(): Date {
-    return moment(this.oauthService.getIdTokenExpiration()).toDate();
-  }
-
   /** Claims included in the id token */
   public get idTokenClaims(): Object {
     return this.oauthService.getIdentityClaims();
@@ -76,5 +66,43 @@ export class AuthenticationService {
   /** Claims included in the access token. */
   public get accessTokenClaims(): Object {
     return jwtDecode(this.oauthService.getAccessToken());
+  }
+
+  /** Expiration date of the access token */
+  public get accessTokenExpiration() : moment.Moment {
+    return moment(this.oauthService.getAccessTokenExpiration());
+  }
+
+  /** Expiration date of the id token */
+  public get idTokenExpiration() : moment.Moment {
+    return moment(this.oauthService.getIdTokenExpiration());
+  }
+
+  /** Reports whether the id token is currently expired */
+  public get idTokenExpired(): boolean {
+    return this.idTokenExpiration.isBefore(this.currentDate);
+  }
+
+  /** Reports whether the access token is currently expired */
+  public get accessTokenExpired(): boolean {
+    return this.accessTokenExpiration.isBefore(this.currentDate);
+  }
+
+  /** Reports the number of seconds until (or since, if negative)
+   * the expiration of the id token */
+  public get idTokenExpiresIn(): number {
+    return this.idTokenExpiration.diff(this.currentDate, 'seconds');
+  }
+
+  /** Reports the number of seconds until (or since, if negative)
+   * the expiration of the access token */
+  public get accessTokenExpiresIn(): number {
+    return this.accessTokenExpiration.diff(this.currentDate, 'seconds');
+  }
+
+  /** Private helper method which returns the current date for
+   * expiration-related calculations */
+  private get currentDate(): moment.Moment {
+    return moment();
   }
 }
