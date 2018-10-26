@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OidcInfoDisplayComponent } from './oidc-info-display.component';
+import { OAuthServiceStub } from 'src/app/services/oauth.service.stub';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 describe('OidcInfoDisplayComponent', () => {
   let component: OidcInfoDisplayComponent;
@@ -8,7 +10,10 @@ describe('OidcInfoDisplayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OidcInfoDisplayComponent ]
+      declarations: [ OidcInfoDisplayComponent ],
+      providers: [
+        { provide: OAuthService, useClass: OAuthServiceStub }
+      ]
     })
     .compileComponents();
   }));

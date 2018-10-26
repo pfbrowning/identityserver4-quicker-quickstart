@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { OAuthService, OAuthEvent } from 'angular-oauth2-oidc';
-import { BehaviorSubject, Observable, timer } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
-import * as moment from 'moment';
-import jwtDecode from 'jwt-decode';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { authConfig } from '../config/auth.config';
 import { ErrorHandlingService } from './error-handling.service';
+import jwtDecode from 'jwt-decode';
+import isBlank from 'is-blank';
+import * as moment from 'moment';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
@@ -65,7 +66,7 @@ export class AuthenticationService {
 
   /** Claims included in the access token. */
   public get accessTokenClaims(): Object {
-    return jwtDecode(this.oauthService.getAccessToken());
+    return !isBlank(this.oauthService.getAccessToken()) ? jwtDecode(this.oauthService.getAccessToken()) : null;
   }
 
   /** Expiration date of the access token */

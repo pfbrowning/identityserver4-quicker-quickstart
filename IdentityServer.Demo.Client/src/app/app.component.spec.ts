@@ -1,12 +1,27 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { OidcInfoDisplayComponent } from './components/oidc-info-display/oidc-info-display.component';
+import { NgLoadingIndicatorModule } from '@browninglogic/ng-loading-indicator';
+import { ModalManagerModule } from '@browninglogic/ng-modal';
+import { ErrorWindowComponent } from './components/error-window/error-window.component';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { OAuthServiceStub } from './services/oauth.service.stub';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
+      imports: [
+        NgLoadingIndicatorModule,
+        ModalManagerModule
       ],
+      declarations: [
+        AppComponent,
+        OidcInfoDisplayComponent,
+        ErrorWindowComponent
+      ],
+      providers: [
+        { provide: OAuthService, useClass: OAuthServiceStub }
+      ]
     }).compileComponents();
   }));
 
@@ -16,16 +31,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'bl-is-sample-ui'`, () => {
+  it(`should have as title 'OIDC Test Client'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('bl-is-sample-ui');
+    expect(app.title).toEqual('OIDC Test Client');
   });
 
   it('should render title in a h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to bl-is-sample-ui!');
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to OIDC Test Client!');
   });
 });

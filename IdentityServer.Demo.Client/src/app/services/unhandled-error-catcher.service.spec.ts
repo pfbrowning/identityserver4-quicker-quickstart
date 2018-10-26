@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UnhandledErrorCatcherService } from './unhandled-error-catcher.service';
+import { UnhandledErrorCatcher } from './unhandled-error-catcher.service';
 
 describe('UnhandledErrorCatcherService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: UnhandledErrorCatcherService = TestBed.get(UnhandledErrorCatcherService);
+    const service: UnhandledErrorCatcher = TestBed.get(UnhandledErrorCatcher);
     expect(service).toBeTruthy();
   });
 });

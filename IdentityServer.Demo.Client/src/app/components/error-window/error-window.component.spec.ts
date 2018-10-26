@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ErrorWindowComponent } from './error-window.component';
+import { ModalManagerModule } from '@browninglogic/ng-modal';
 
 describe('ErrorWindowComponent', () => {
   let component: ErrorWindowComponent;
@@ -8,6 +9,7 @@ describe('ErrorWindowComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ ModalManagerModule ],
       declarations: [ ErrorWindowComponent ]
     })
     .compileComponents();

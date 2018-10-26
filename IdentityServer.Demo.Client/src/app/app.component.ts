@@ -9,7 +9,7 @@ import { ErrorHandlingService } from './services/error-handling.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'IdentityServer Demo Client';
+  title = 'OIDC Test Client';
 
   constructor(private authenticationService: AuthenticationService,
     private loadingIndicatorService: LoadingIndicatorService,
