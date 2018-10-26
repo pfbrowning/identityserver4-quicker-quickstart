@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { AuthenticationService } from 'src/services/authentication.service';
 import { LoadingIndicatorService } from '@browninglogic/ng-loading-indicator';
-import { IdentityServerSampleApiService } from 'src/services/identity-server-sample-api.service';
+import { AuthenticationService } from './services/authentication.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -12,8 +11,7 @@ import { finalize } from 'rxjs/operators';
 export class AppComponent {
   title = 'IdentityServer Demo Client';
   constructor(private authenticationService: AuthenticationService,
-    private loadingIndicatorService: LoadingIndicatorService,
-    private identityServerSampleApiService: IdentityServerSampleApiService) {}
+    private loadingIndicatorService: LoadingIndicatorService) {}
 
   public publicResource: string[];
   public protectedResource: object[];
@@ -45,19 +43,5 @@ export class AppComponent {
 
   public get accessTokenClaims(): Object {
     return this.authenticationService.accessTokenClaims;
-  }
-
-  public fetchPublicResource(): void {
-    this.loadingIndicatorService.showLoadingIndicator('Fetching Public Resource');
-    this.identityServerSampleApiService.fetchPublicResource().pipe(
-      finalize(() => this.loadingIndicatorService.hideLoadingIndicator())
-    ).subscribe(publicResource => this.publicResource = publicResource);
-  }
-
-  public fetchProtectedResource(): void {
-    this.loadingIndicatorService.showLoadingIndicator('Fetching Protected Resource');
-    this.identityServerSampleApiService.fetchProtectedResource().pipe(
-      finalize(() => this.loadingIndicatorService.hideLoadingIndicator())
-    ).subscribe(protectedResource => this.protectedResource = protectedResource);
   }
 }
