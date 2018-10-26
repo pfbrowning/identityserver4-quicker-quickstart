@@ -5,6 +5,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import jwtDecode from 'jwt-decode';
 import { authConfig } from '../config/auth.config';
+import { ErrorHandlingService } from './error-handling.service';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
@@ -17,7 +18,7 @@ export class AuthenticationService {
     ID token if present.  Afterwards set _tokenProcessed to true so that anybody listening
     to tokenProcessed knows that the token has been processed.*/
     this.oauthService.loadDiscoveryDocumentAndTryLogin()
-      .then(() => this._tokenProcessed.next(true))
+      .then(() => this._tokenProcessed.next(true));
   }
 
   /** Emits once the discovery document has been loaded and the id token has been
