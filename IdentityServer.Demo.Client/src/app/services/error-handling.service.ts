@@ -10,7 +10,7 @@ export class ErrorHandlingService {
   public appError = new ReplaySubject<AppError>(1);
 
   /** Emits the provided error so that the error window can display it */
-  handleError(error: any, message: string = null) {
-    this.appError.next(new AppError(error, message));
+  handleError(error: any, comment: string = null) {
+    this.appError.next(new AppError(error, comment));
   }
 }

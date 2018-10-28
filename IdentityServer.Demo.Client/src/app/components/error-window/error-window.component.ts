@@ -23,7 +23,7 @@ export class ErrorWindowComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subErrorCaught.unsubscribe();
+    if(this.subErrorCaught) this.subErrorCaught.unsubscribe();
   }
 
   /** Store the error for access within the template and show the error modal */

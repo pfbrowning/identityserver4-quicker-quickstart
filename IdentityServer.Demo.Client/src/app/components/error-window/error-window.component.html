@@ -2,9 +2,9 @@
   <h1 header class="errorHeader">An Error Has Occurred</h1>
   <div body class="errorBody">
     <ng-container *ngIf="appError">
-      <p>{{appError.message}}</p>
-      <p>{{appError.error.message}}</p>
-      <input type="button" value="Restart" (click)="restartApplication()" />
+      <p class="errorComment">{{appError.comment}}</p>
+      <p class="errorMessage">{{appError.error.message}}</p>
+      <input type="button" value="Restart" (click)="restartApplication()" class="actionButton" />
     </ng-container>
   </div>
 </nm-modal-window>

@@ -27,3 +27,19 @@ html {
         padding-right: 1%;
     }
 }
+
+/* Provide some basic styling so that our buttons are a bit less ugly than regular unstyled buttons. */
+ul.actionButtonList {
+    padding:0;
+}
+ul.actionButtonList li {
+    list-style: none;
+    margin:10px 0px;
+}
+ul.actionButtonList input,
+input.actionButton {
+    width: 135px;
+    padding:6px;
+    border: 1px solid grey;
+    border-radius: 8px;
+}
