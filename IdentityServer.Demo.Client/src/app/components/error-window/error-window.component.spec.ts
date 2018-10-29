@@ -33,7 +33,7 @@ describe('ErrorWindowComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show modal on error', () => {
+  it('should show modal on error and bind messages to template', () => {
     /* Expect that upon initialization the modal is not visible and that
     no error message has been bound to the template. */
     expect(errorModal.visible).toBe(false);
