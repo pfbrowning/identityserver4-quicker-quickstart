@@ -1,10 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ErrorWindowComponent } from './error-window.component';
 import { ModalManagerModule, ModalWindowComponent } from '@browninglogic/ng-modal';
 import { ErrorHandlingService } from '../../services/error-handling.service';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 
 describe('ErrorWindowComponent', () => {
   let component: ErrorWindowComponent;
@@ -39,18 +37,32 @@ describe('ErrorWindowComponent', () => {
     expect(errorModal.visible).toBe(false);
     expect(getElementBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBeNull();
 
+    simulateCheckError("Test Error", "Test Comment");
+  })
+
+  it('should continue to update the template for subsequent errors', () => {
+    const errorSequence = [
+      {'message': 'first error', 'comment': 'uh-oh'},
+      {'message': 'second error', 'comment': 'oh no'},
+      {'message': 'third error', 'comment': 'lots of errors!'}
+    ]
+
+    errorSequence.forEach(errorParam => simulateCheckError(errorParam.message, errorParam.comment));
+  })
+
+  function simulateCheckError(errorMessage: string, errorComment: string) {
     // Simulate the occurrence of an error
-    errorHandlingService.handleError(new Error("Test Error"), "Test Message");
+    errorHandlingService.handleError(new Error(errorMessage), errorComment);
     fixture.detectChanges();
 
     /* Expect that the modal is visible and the message and comment have been assigned
     to the appError model and bound to the template. */
     expect(errorModal.visible).toBe(true);
-    expect(component.appError.error['message']).toBe("Test Error");
-    expect(component.appError.comment).toBe("Test Message");
-    expect(getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBe("Test Error");
-    expect(getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorComment')).toBe("Test Message");
-  })
+    expect(component.appError.error['message']).toBe(errorMessage);
+    expect(component.appError.comment).toBe(errorComment);
+    expect(getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBe(errorMessage);
+    expect(getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorComment')).toBe(errorComment);
+  }
 
   function getElementBySelector<ComponentType>(fixture: ComponentFixture<ComponentType>, selector: string) {
     const debugElement = fixture.debugElement.query(By.css(selector));
