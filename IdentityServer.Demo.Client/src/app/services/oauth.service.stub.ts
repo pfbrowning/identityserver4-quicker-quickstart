@@ -1,5 +1,4 @@
-import { AuthConfig, OAuthEvent, EventType, OAuthInfoEvent } from "angular-oauth2-oidc";
-import { Observable, of } from "rxjs";
+import { AuthConfig } from "angular-oauth2-oidc";
 
 export class OAuthServiceStub {
     public configure(authConfig: AuthConfig) : void {}
@@ -18,15 +17,6 @@ export class OAuthServiceStub {
     public getAccessToken() : string {
         return null;
     }
-    // public get events(): Observable<OAuthEvent> {
-    //     return of(new OAuthInfoEvent("user_profile_loaded"));
-    // }
-    // public getIdTokenExpiration() {
-    //     return 0;
-    // }
-    // public getAccessTokenExpiration() {
-    //     return 0;
-    // }
     public setupAutomaticSilentRefresh() : Promise<void> {
         return Promise.resolve();
     }
