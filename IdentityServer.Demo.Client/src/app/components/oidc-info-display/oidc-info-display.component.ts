@@ -20,7 +20,14 @@ export class OidcInfoDisplayComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     /* Update the expiration info on a 1 second interval in order to keep
     the expiresIn values updated in the template. */
-    this.secondInterval = interval(1000).subscribe(() => this.updateExpirationInfo());
+    this.secondInterval = interval(1000).subscribe(() => this.updateExpirationInfo(
+      this.authenticationService.idTokenExpiration,
+      this.authenticationService.idTokenExpired,
+      this.authenticationService.idTokenExpiresIn,
+      this.authenticationService.accessTokenExpiration,
+      this.authenticationService.accessTokenExpired,
+      this.authenticationService.accessTokenExpiresIn
+    ));
   }
 
   public ngOnDestroy() {
@@ -37,15 +44,10 @@ export class OidcInfoDisplayComponent implements OnInit, OnDestroy {
 
   /** Updates the token expiration objects with the latest value
    * in order to be bound to the template */
-  updateExpirationInfo(): void {
-    this.identityTokenExpirationInfo = new TokenExpirationInfo(
-      this.authenticationService.idTokenExpiration, 
-      this.authenticationService.idTokenExpired,
-      this.authenticationService.idTokenExpiresIn);
+  updateExpirationInfo(idtokenExpiration: Moment, idTokenExpired: boolean, idTokenExpiresIn: number, 
+    accessTokenExpiration: Moment, accessTokenExpired: boolean, accessTokenExpiresIn: number): void {
+    this.identityTokenExpirationInfo = new TokenExpirationInfo(idtokenExpiration, idTokenExpired, idTokenExpiresIn);
 
-    this.accessTokenExpirationInfo = new TokenExpirationInfo(
-      this.authenticationService.accessTokenExpiration, 
-      this.authenticationService.accessTokenExpired, 
-      this.authenticationService.accessTokenExpiresIn);
+    this.accessTokenExpirationInfo = new TokenExpirationInfo(accessTokenExpiration, accessTokenExpired, accessTokenExpiresIn);
   }
 }

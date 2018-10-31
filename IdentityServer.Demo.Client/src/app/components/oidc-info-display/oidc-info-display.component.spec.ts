@@ -40,52 +40,16 @@ describe('OidcInfoDisplayComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should properly update the token expiration info each second', fakeAsync(() => {
-    // Check the state of the component before initialization
-    expect(component.identityTokenExpirationInfo).toBeUndefined();
-    expect(component.accessTokenExpirationInfo).toBeUndefined();
-    expect(component.secondInterval).toBeUndefined();
-    expect(updateExpirationInfoSpy).not.toHaveBeenCalled();
-    expect(ngOnInitSpy).not.toHaveBeenCalled();
-
+  it('should call updateExpirationInfo with updated values each second', fakeAsync(() => {
     // Detect changes to initialize the component
     fixture.detectChanges();
 
-    /* Immediately after initialization we expect that the second
-    interval subscription has been initialized and ngOnInit has been
-    called once, but updateExpirationInfo has not yet been called
-    and the token expiration data hasn't been bound. */
-    expect(component.identityTokenExpirationInfo).toBeUndefined();
-    expect(component.accessTokenExpirationInfo).toBeUndefined();
-    expect(component.secondInterval.closed).toBe(false);
-    expect(ngOnInitSpy).toHaveBeenCalledTimes(1);
-    expect(updateExpirationInfoSpy).not.toHaveBeenCalled();
-
-    /* Mock up some test data to test a sequence of differing values.  It doesn't matter if this
-    data is semantically accurate: we're just testing that the model and template are updated
-    with the provided test data at the correct interval, regardless of what that test data is. */
-    const testValues = [
-      {authenticated: true, idExpDate: moment('2013-02-08 09:30:26'), idExpired: false, idExpiresIn: 3, 
-        accessExpDate: moment('2014-01-01 01:30:24'), accessExpired: true, accessExpiresIn: 17 },
-      {authenticated: true, idExpDate: moment('1999-03-09 04:28:31'), idExpired: true, idExpiresIn: -1983, 
-        accessExpDate: moment('2022-12-12 02:01:03'), accessExpired: false, accessExpiresIn: -946 },
-      {authenticated: false, idExpDate: moment('1234-05-06 07:08:09'), idExpired: true, idExpiresIn: 2, 
-        accessExpDate: moment('9876-01-01 09:08:13'), accessExpired: false, accessExpiresIn: 8 },
-      {authenticated: true, idExpDate: moment('2999-07-08 01:02:03'), idExpired: false, idExpiresIn: 1234, 
-        accessExpDate: moment('1941-12-07 04:05:06'), accessExpired: true, accessExpiresIn: 5678 },
-      {authenticated: false, idExpDate: null, idExpired: null, idExpiresIn: null, 
-        accessExpDate: null, accessExpired: null, accessExpiresIn: null },
-      {authenticated: true, idExpDate: moment('1914-06-28 01:01:01'), idExpired: false, idExpiresIn: 1234, 
-        accessExpDate: moment('1918-11-11 23:59:59'), accessExpired: true, accessExpiresIn: 804359894 },
-    ]
-
     // Iterate through each test data and perform our Arrange / Act / Assert per each iteration
     let iterationCounter = 0;
-    testValues.forEach(testEntry => {
+    testExpirationData.forEach(testEntry => {
       /* Arrange: increment the iteration counter and assign the dummy test
       values to our authentication service stub. */
       iterationCounter++;
-      authenticationService.authenticated = testEntry.authenticated;
       authenticationService.idTokenExpiration = testEntry.idExpDate;
       authenticationService.idTokenExpired = testEntry.idExpired;
       authenticationService.idTokenExpiresIn = testEntry.idExpiresIn;
@@ -93,13 +57,57 @@ describe('OidcInfoDisplayComponent', () => {
       authenticationService.accessTokenExpired = testEntry.accessExpired;
       authenticationService.accessTokenExpiresIn = testEntry.accessExpiresIn;
 
-      // Act: Simulate waiting 1 second and then detect changes to update the template bindings
+      // Act: Simulate waiting 1 second
       tick(1000);
+
+      /* Assert: Expect that update expiration info was most recently called with
+      the data for the current iteration and that it's been called once per iteration
+      thus far. */
+      expect(updateExpirationInfoSpy.calls.mostRecent().args).toEqual([
+        testEntry.idExpDate,
+        testEntry.idExpired,
+        testEntry.idExpiresIn,
+        testEntry.accessExpDate,
+        testEntry.accessExpired,
+        testEntry.accessExpiresIn
+      ]);
+      expect(updateExpirationInfoSpy).toHaveBeenCalledTimes(iterationCounter);
+    })
+
+    // updateExpirationInfo should have been called 6 times because we have 6 dummy data entries
+    expect(updateExpirationInfoSpy).toHaveBeenCalledTimes(6);
+
+    // Destroy the component to unsubscribe the interval
+    fixture.destroy();
+
+    // Expect that the interval has been unsubscribed
+    expect(ngOnDestroySpy).toHaveBeenCalledTimes(1);
+    expect(component.secondInterval.closed).toBe(true);
+  }));
+
+  it('should properly bind the provided expiration data to the component and template', fakeAsync(() => {
+    // Detect changes to initialize the component
+    fixture.detectChanges();
+    /* Unsubscribe from the second interval so that we can test the template binding
+    in isolation. */
+    component.secondInterval.unsubscribe();
+    expect(component.secondInterval.closed).toBe(true);
+
+    testExpirationData.forEach(testEntry => {
+      /* Arrange & Act: Pass the test data to updateExpirationInfo and detect 
+      changes to update the template binding. */
+      component.updateExpirationInfo(
+        testEntry.idExpDate,
+        testEntry.idExpired,
+        testEntry.idExpiresIn,
+        testEntry.accessExpDate,
+        testEntry.accessExpired,
+        testEntry.accessExpiresIn
+      );
+
       fixture.detectChanges();
 
       // Assert: Ensure that the dummy data has been bound properly
-      // Expect that updateExpirationInfo has been called once per iteration thus far
-      expect(updateExpirationInfoSpy).toHaveBeenCalledTimes(iterationCounter);
       // Expect that each token expiration info field was properly bound to the component's model fields
       expect(component.identityTokenExpirationInfo.expiration).toBe(testEntry.idExpDate);
       expect(component.identityTokenExpirationInfo.expired).toBe(testEntry.idExpired);
@@ -118,16 +126,6 @@ describe('OidcInfoDisplayComponent', () => {
 
     // updateExpirationInfo should have been called 6 times because we have 6 dummy data entries
     expect(updateExpirationInfoSpy).toHaveBeenCalledTimes(6);
-    // Before destroying, expect that the subscription isn't closed yet
-    expect(ngOnDestroySpy).not.toHaveBeenCalled();
-    expect(component.secondInterval.closed).toBeFalsy();
-
-    // Destroy the component to unsubscribe the interval
-    fixture.destroy();
-
-    // Expect that the interval has been unsubscribed
-    expect(ngOnDestroySpy).toHaveBeenCalledTimes(1);
-    expect(component.secondInterval.closed).toBe(true);
   }));
 
   it('should bind identity token claims & access token claims to the template', () => {
@@ -155,4 +153,22 @@ describe('OidcInfoDisplayComponent', () => {
     TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(boundAccessTokenClaims, JSON.stringify(component.accessTokenClaims));
     TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(boundIdentityClaims, JSON.stringify(component.identityTokenClaims));
   })
+
+  /* Mock up some test data to test a sequence of differing values.  It doesn't matter if this
+  data is semantically accurate: we're just testing that the model and template are updated
+  with the provided test data at the correct interval, regardless of what that test data is. */
+  const testExpirationData = [
+    {authenticated: true, idExpDate: moment('2013-02-08 09:30:26'), idExpired: false, idExpiresIn: 3, 
+      accessExpDate: moment('2014-01-01 01:30:24'), accessExpired: true, accessExpiresIn: 17 },
+    {authenticated: true, idExpDate: moment('1999-03-09 04:28:31'), idExpired: true, idExpiresIn: -1983, 
+      accessExpDate: moment('2022-12-12 02:01:03'), accessExpired: false, accessExpiresIn: -946 },
+    {authenticated: false, idExpDate: moment('1234-05-06 07:08:09'), idExpired: true, idExpiresIn: 2, 
+      accessExpDate: moment('9876-01-01 09:08:13'), accessExpired: false, accessExpiresIn: 8 },
+    {authenticated: true, idExpDate: moment('2999-07-08 01:02:03'), idExpired: false, idExpiresIn: 1234, 
+      accessExpDate: moment('1941-12-07 04:05:06'), accessExpired: true, accessExpiresIn: 5678 },
+    {authenticated: false, idExpDate: null, idExpired: null, idExpiresIn: null, 
+      accessExpDate: null, accessExpired: null, accessExpiresIn: null },
+    {authenticated: true, idExpDate: moment('1914-06-28 01:01:01'), idExpired: false, idExpiresIn: 1234, 
+      accessExpDate: moment('1918-11-11 23:59:59'), accessExpired: true, accessExpiresIn: 804359894 },
+  ];
 });
