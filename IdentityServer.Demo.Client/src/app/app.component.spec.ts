@@ -6,6 +6,8 @@ import { ModalManagerModule } from '@browninglogic/ng-modal';
 import { ErrorWindowComponent } from './components/error-window/error-window.component';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { OAuthServiceStub } from './services/oauth.service.stub';
+import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationServiceStub } from './services/authentication.service.stub';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -20,7 +22,7 @@ describe('AppComponent', () => {
         ErrorWindowComponent
       ],
       providers: [
-        { provide: OAuthService, useClass: OAuthServiceStub }
+        { provide: AuthenticationService, useClass: AuthenticationServiceStub }
       ]
     }).compileComponents();
   }));
