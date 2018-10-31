@@ -129,4 +129,30 @@ describe('OidcInfoDisplayComponent', () => {
     expect(ngOnDestroySpy).toHaveBeenCalledTimes(1);
     expect(component.secondInterval.closed).toBe(true);
   }));
+
+  it('should bind identity token claims & access token claims to the template', () => {
+    // Arrange: Configure claims on authentication service stub
+    fixture.detectChanges();
+    const identityClaims = {
+      'testKey1': 'identity test value 1',
+      'testKey2': 'identity test value 2'
+    }
+    const accessClaims = {
+      'testKey3': 'access test value 3',
+      'testKey4': 'access test value 4'
+    }
+    authenticationService.idTokenClaims = identityClaims;
+    authenticationService.accessTokenClaims = accessClaims;
+
+    // Act: detect changes to trigger template binding
+    fixture.detectChanges();
+
+    // Assert that the claims were bound to the component and the template as expected
+    expect(component.identityTokenClaims).toBe(authenticationService.idTokenClaims);
+    expect(component.accessTokenClaims).toBe(authenticationService.accessTokenClaims);
+    const boundIdentityClaims = TestHelpers.getElementTextBySelector<OidcInfoDisplayComponent>(fixture, '.identityTokenClaims');
+    const boundAccessTokenClaims = TestHelpers.getElementTextBySelector<OidcInfoDisplayComponent>(fixture, '.accessTokenClaims');
+    TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(boundAccessTokenClaims, JSON.stringify(component.accessTokenClaims));
+    TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(boundIdentityClaims, JSON.stringify(component.identityTokenClaims));
+  })
 });
