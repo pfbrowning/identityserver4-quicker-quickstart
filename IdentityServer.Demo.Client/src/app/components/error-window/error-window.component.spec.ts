@@ -3,6 +3,7 @@ import { ErrorWindowComponent } from './error-window.component';
 import { ModalManagerModule, ModalWindowComponent } from '@browninglogic/ng-modal';
 import { ErrorHandlingService } from '../../services/error-handling.service';
 import { By } from '@angular/platform-browser';
+import { TestHelpers } from 'src/test-helpers';
 
 describe('ErrorWindowComponent', () => {
   let component: ErrorWindowComponent;
@@ -35,7 +36,7 @@ describe('ErrorWindowComponent', () => {
     /* Expect that upon initialization the modal is not visible and that
     no error message has been bound to the template. */
     expect(errorModal.visible).toBe(false);
-    expect(getElementBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBeNull();
+    expect(TestHelpers.getElementBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBeNull();
 
     simulateCheckError("Test Error", "Test Comment");
   })
@@ -60,17 +61,7 @@ describe('ErrorWindowComponent', () => {
     expect(errorModal.visible).toBe(true);
     expect(component.appError.error['message']).toBe(errorMessage);
     expect(component.appError.comment).toBe(errorComment);
-    expect(getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBe(errorMessage);
-    expect(getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorComment')).toBe(errorComment);
-  }
-
-  function getElementBySelector<ComponentType>(fixture: ComponentFixture<ComponentType>, selector: string) {
-    const debugElement = fixture.debugElement.query(By.css(selector));
-    return debugElement != null ? debugElement.nativeElement : null;
-  }
-
-  function getElementTextBySelector<ComponentType>(fixture: ComponentFixture<ComponentType>, selector: string) {
-    const nativeElement = getElementBySelector<ComponentType>(fixture, selector);
-    return nativeElement != null ? nativeElement.innerText : null;
+    expect(TestHelpers.getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBe(errorMessage);
+    expect(TestHelpers.getElementTextBySelector<ErrorWindowComponent>(fixture, '.errorComment')).toBe(errorComment);
   }
 });
