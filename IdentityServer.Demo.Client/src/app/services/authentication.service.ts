@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OAuthService, OAuthEvent } from 'angular-oauth2-oidc';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { authConfig } from '../config/auth.config';
 import { ErrorHandlingService } from './error-handling.service';
@@ -10,7 +10,7 @@ import * as moment from 'moment';
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
-  private readonly _tokenProcessed = new BehaviorSubject<boolean>(false);
+  private readonly _tokenProcessed = new ReplaySubject<void>(1);
 
   constructor(private oauthService: OAuthService, private errorHandlingService: ErrorHandlingService) {
     // Initialize the oauth service with our auth config settings
@@ -19,7 +19,7 @@ export class AuthenticationService {
     ID token if present.  Afterwards set _tokenProcessed to true so that anybody listening
     to tokenProcessed knows that the token has been processed.*/
     this.oauthService.loadDiscoveryDocumentAndTryLogin()
-      .then(() => this._tokenProcessed.next(true))
+      .then(() => this._tokenProcessed.next())
       .catch(error => this.errorHandlingService.handleError(error, "Failed to load discovery document: Is your OIDC provider configured and running?"))
 
     // Configure automatic silent refresh
@@ -30,16 +30,14 @@ export class AuthenticationService {
    * processed, or immediately if subscribed to after the aforementioned has
    * already occurred. */
   public tokenProcessed(): Observable<void> {
-      return this._tokenProcessed.pipe(
-          filter(processed => processed === true),
-          map(() => null)
-        );
+    return this._tokenProcessed;
   }
 
   /** Redirects the user to the IdentityServer login page for implicit flow */
   public initImplicitFlow(): void {
     this.oauthService.initImplicitFlow();
   }
+  
   public logOut(): void {
     this.oauthService.logOut();
   }
