@@ -155,8 +155,8 @@ describe('OidcInfoDisplayComponent', () => {
   })
 
   /* Mock up some test data to test a sequence of differing values.  It doesn't matter if this
-  data is semantically accurate: we're just testing that the model and template are updated
-  with the provided test data at the correct interval, regardless of what that test data is. */
+  data is semantically accurate: we're just testing the interval and the model / template binding,
+  rather than the data itself. */
   const testExpirationData = [
     {authenticated: true, idExpDate: moment('2013-02-08 09:30:26'), idExpired: false, idExpiresIn: 3, 
       accessExpDate: moment('2014-01-01 01:30:24'), accessExpired: true, accessExpiresIn: 17 },
