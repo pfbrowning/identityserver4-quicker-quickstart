@@ -57,11 +57,6 @@ export class AuthenticationService {
     return this.oauthService.getIdentityClaims();
   }
 
-  /** Raw access token string */
-  public get accessToken(): string {
-    return this.oauthService.getAccessToken();
-  }
-
   /** Claims included in the access token. */
   public get accessTokenClaims(): Object {
     return !isBlank(this.oauthService.getAccessToken()) ? jwtDecode(this.oauthService.getAccessToken()) : null;
@@ -101,7 +96,7 @@ export class AuthenticationService {
 
   /** Private helper method which returns the current date for
    * expiration-related calculations */
-  private get currentDate(): moment.Moment {
+  public get currentDate(): moment.Moment {
     return moment();
   }
 }
