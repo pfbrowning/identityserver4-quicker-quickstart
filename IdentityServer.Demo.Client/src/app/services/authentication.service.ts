@@ -34,7 +34,7 @@ export class AuthenticationService {
     return this._tokenProcessed;
   }
 
-  /** Redirects the user to the IdentityServer login page for implicit flow */
+  /** Redirects the user to the oidc provider login page for implicit flow */
   public initImplicitFlow(): void {
     this.oauthService.initImplicitFlow();
   }

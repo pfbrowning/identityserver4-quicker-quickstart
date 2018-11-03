@@ -1,5 +1,5 @@
 {
-  "name": "bl-is-sample-ui",
+  "name": "oidc-test-client",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
