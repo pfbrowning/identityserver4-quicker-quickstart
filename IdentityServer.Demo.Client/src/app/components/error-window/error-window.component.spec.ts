@@ -38,18 +38,18 @@ describe('ErrorWindowComponent', () => {
     expect(errorModal.visible).toBe(false);
     expect(TestHelpers.getElementBySelector<ErrorWindowComponent>(fixture, '.errorMessage')).toBeNull();
 
-    simulateCheckError("Test Error", "Test Comment");
-  })
+    simulateCheckError('Test Error', 'Test Comment');
+  });
 
   it('should continue to update the template for subsequent errors', () => {
     const errorSequence = [
       {'message': 'first error', 'comment': 'uh-oh'},
       {'message': 'second error', 'comment': 'oh no'},
       {'message': 'third error', 'comment': 'lots of errors!'}
-    ]
+    ];
 
     errorSequence.forEach(errorParam => simulateCheckError(errorParam.message, errorParam.comment));
-  })
+  });
 
   function simulateCheckError(errorMessage: string, errorComment: string) {
     // Simulate the occurrence of an error

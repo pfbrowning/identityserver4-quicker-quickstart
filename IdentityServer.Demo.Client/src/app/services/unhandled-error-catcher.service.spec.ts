@@ -17,7 +17,7 @@ describe('UnhandledErrorCatcherService', () => {
     });
 
     errorHandlingService = TestBed.get(ErrorHandlingService);
-    unhandledErrorCatcher = TestBed.get(UnhandledErrorCatcher)
+    unhandledErrorCatcher = TestBed.get(UnhandledErrorCatcher);
     appErrorSpy = jasmine.createSpyObj('appError', ['emit', 'error', 'complete']);
   });
 
@@ -34,7 +34,7 @@ describe('UnhandledErrorCatcherService', () => {
     );
 
     // Simulate catching an unhandled error
-    unhandledErrorCatcher.handleError("Test Error");
+    unhandledErrorCatcher.handleError('Test Error');
 
     // Expect that the error was passed through and emitted from error handling service
     expect(appErrorSpy.emit).toHaveBeenCalledTimes(1);

@@ -31,7 +31,7 @@ export class OidcInfoDisplayComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if(this.secondInterval) this.secondInterval.unsubscribe();
+    if (this.secondInterval) { this.secondInterval.unsubscribe(); }
   }
 
   public get identityTokenClaims(): Object {
@@ -44,7 +44,7 @@ export class OidcInfoDisplayComponent implements OnInit, OnDestroy {
 
   /** Updates the token expiration objects with the latest value
    * in order to be bound to the template */
-  updateExpirationInfo(idtokenExpiration: Moment, idTokenExpired: boolean, idTokenExpiresIn: number, 
+  updateExpirationInfo(idtokenExpiration: Moment, idTokenExpired: boolean, idTokenExpiresIn: number,
     accessTokenExpiration: Moment, accessTokenExpired: boolean, accessTokenExpiresIn: number): void {
     this.identityTokenExpirationInfo = new TokenExpirationInfo(idtokenExpiration, idTokenExpired, idTokenExpiresIn);
 

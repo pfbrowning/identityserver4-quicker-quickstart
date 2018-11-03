@@ -34,12 +34,12 @@ describe('ExceptionHandlingService', () => {
     expect(appErrorSpy.emit).not.toHaveBeenCalled();
 
     // handle an error and check that it was emitted properly
-    errorHandlingService.handleError("test error message", "test error comment");
+    errorHandlingService.handleError('test error message', 'test error comment');
     expect(appErrorSpy.emit).toHaveBeenCalledTimes(1);
     expect(appErrorSpy.emit.calls.mostRecent().args).toEqual([new AppError('test error message', 'test error comment')]);
 
     // handle a second error and check that it was emitted properly
-    errorHandlingService.handleError("error 2", "comment 2");
+    errorHandlingService.handleError('error 2', 'comment 2');
     expect(appErrorSpy.emit).toHaveBeenCalledTimes(2);
     expect(appErrorSpy.emit.calls.mostRecent().args).toEqual([new AppError('error 2', 'comment 2')]);
 
@@ -53,7 +53,7 @@ describe('ExceptionHandlingService', () => {
 
   it('should emit the previous error to a late subscriber', () => {
     // handle an error before anybody has subscribed to the appError
-    errorHandlingService.handleError("test error", "test comment");
+    errorHandlingService.handleError('test error', 'test comment');
 
     // Subscribe to appError
     appErrorSub = errorHandlingService.appError.subscribe(

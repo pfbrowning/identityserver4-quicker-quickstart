@@ -1,6 +1,6 @@
-import { ComponentFixture } from "@angular/core/testing";
-import { By } from "@angular/platform-browser";
-import { Utils } from "./app/utils/utils";
+import { ComponentFixture } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { Utils } from './app/utils/utils';
 
 export class TestHelpers {
   public static getElementBySelector<ComponentType>(fixture: ComponentFixture<ComponentType>, selector: string): any {

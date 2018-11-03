@@ -20,7 +20,8 @@ export class AuthenticationService {
     to tokenProcessed knows that the token has been processed.*/
     this.oauthService.loadDiscoveryDocumentAndTryLogin()
       .then(() => this._tokenProcessed.next())
-      .catch(error => this.errorHandlingService.handleError(error, "Failed to load discovery document: Is your OIDC provider configured and running?"))
+      .catch(error => this.errorHandlingService.handleError(error,
+        'Failed to load discovery document: Is your OIDC provider configured and running?'));
 
     // Configure automatic silent refresh
     this.oauthService.setupAutomaticSilentRefresh();
@@ -37,7 +38,7 @@ export class AuthenticationService {
   public initImplicitFlow(): void {
     this.oauthService.initImplicitFlow();
   }
-  
+
   public logOut(): void {
     this.oauthService.logOut();
   }
@@ -63,12 +64,12 @@ export class AuthenticationService {
   }
 
   /** Expiration date of the access token */
-  public get accessTokenExpiration() : moment.Moment {
+  public get accessTokenExpiration(): moment.Moment {
     return moment(this.oauthService.getAccessTokenExpiration());
   }
 
   /** Expiration date of the id token */
-  public get idTokenExpiration() : moment.Moment {
+  public get idTokenExpiration(): moment.Moment {
     return moment(this.oauthService.getIdTokenExpiration());
   }
 

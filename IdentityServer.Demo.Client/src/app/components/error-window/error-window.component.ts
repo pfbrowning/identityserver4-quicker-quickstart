@@ -10,10 +10,10 @@ import { ErrorHandlingService } from 'src/app/services/error-handling.service';
   styleUrls: ['./error-window.component.css']
 })
 export class ErrorWindowComponent implements OnInit, OnDestroy {
-  constructor(private errorHandlingService : ErrorHandlingService) {}
+  constructor(private errorHandlingService: ErrorHandlingService) {}
 
-  @ViewChild('errorModal') errorModal : ModalWindowComponent;
-  private subErrorCaught : Subscription;
+  @ViewChild('errorModal') errorModal: ModalWindowComponent;
+  private subErrorCaught: Subscription;
   public appError: AppError;
 
   ngOnInit() {
@@ -23,11 +23,11 @@ export class ErrorWindowComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.subErrorCaught) this.subErrorCaught.unsubscribe();
+    if (this.subErrorCaught) { this.subErrorCaught.unsubscribe(); }
   }
 
   /** Store the error for access within the template and show the error modal */
-  private onErrorCaught(error : AppError) {
+  private onErrorCaught(error: AppError) {
     this.appError = error;
     this.errorModal.show();
   }

@@ -8,7 +8,7 @@ export class UnhandledErrorCatcher implements ErrorHandler {
 
   // Pass any unhandled errors to the global error handler
   handleError(error: any) {
-    let errorHandler = this.injector.get(ErrorHandlingService);
-    errorHandler.handleError(error, "Unhandled Error Caught");
+    const errorHandler = this.injector.get(ErrorHandlingService);
+    errorHandler.handleError(error, 'Unhandled Error Caught');
   }
 }

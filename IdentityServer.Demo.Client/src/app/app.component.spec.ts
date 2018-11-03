@@ -47,10 +47,10 @@ describe('AppComponent', () => {
     appComponent = fixture.debugElement.componentInstance;
     loadingIndicatorService = TestBed.get(LoadingIndicatorService);
     errorHandlingService = TestBed.get(ErrorHandlingService);
-    showLoadingIndicatorSpy = spyOn(loadingIndicatorService, "showLoadingIndicator");
-    hideLoadingIndicatorSpy = spyOn(loadingIndicatorService, "hideLoadingIndicator");
-    alertSpy = spyOn(appComponent, "alert");
-    handleErrorSpy = spyOn(errorHandlingService, "handleError");
+    showLoadingIndicatorSpy = spyOn(loadingIndicatorService, 'showLoadingIndicator');
+    hideLoadingIndicatorSpy = spyOn(loadingIndicatorService, 'hideLoadingIndicator');
+    alertSpy = spyOn(appComponent, 'alert');
+    handleErrorSpy = spyOn(errorHandlingService, 'handleError');
     fixture.detectChanges();
   });
 
@@ -83,7 +83,7 @@ describe('AppComponent', () => {
       expect(handleErrorSpy).not.toHaveBeenCalled();
 
       done();
-    })
+    });
 
     // Trigger the silent refresh test
     appComponent.silentRefresh();
@@ -104,7 +104,7 @@ describe('AppComponent', () => {
       expect(handleErrorSpy.calls.mostRecent().args).toEqual(['failure test', 'Silent Refresh Failed']);
 
       done();
-    })
+    });
 
     // Trigger the silent refresh test
     appComponent.silentRefresh();

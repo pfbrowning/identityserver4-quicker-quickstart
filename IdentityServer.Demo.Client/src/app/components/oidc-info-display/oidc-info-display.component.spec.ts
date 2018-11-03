@@ -13,7 +13,7 @@ describe('OidcInfoDisplayComponent', () => {
   let component: OidcInfoDisplayComponent;
   let fixture: ComponentFixture<OidcInfoDisplayComponent>;
   let authenticationService: AuthenticationServiceStub;
-  let updateExpirationInfoSpy : jasmine.Spy;
+  let updateExpirationInfoSpy: jasmine.Spy;
   let ngOnInitSpy: jasmine.Spy;
   let ngOnDestroySpy: jasmine.Spy;
 
@@ -72,7 +72,7 @@ describe('OidcInfoDisplayComponent', () => {
         testEntry.accessExpiresIn
       ]);
       expect(updateExpirationInfoSpy).toHaveBeenCalledTimes(iterationCounter);
-    })
+    });
 
     // updateExpirationInfo should have been called 6 times because we have 6 dummy data entries
     expect(updateExpirationInfoSpy).toHaveBeenCalledTimes(6);
@@ -94,7 +94,7 @@ describe('OidcInfoDisplayComponent', () => {
     expect(component.secondInterval.closed).toBe(true);
 
     testExpirationData.forEach(testEntry => {
-      /* Arrange & Act: Pass the test data to updateExpirationInfo and detect 
+      /* Arrange & Act: Pass the test data to updateExpirationInfo and detect
       changes to update the template binding. */
       component.updateExpirationInfo(
         testEntry.idExpDate,
@@ -117,12 +117,12 @@ describe('OidcInfoDisplayComponent', () => {
       expect(component.accessTokenExpirationInfo.expiresIn).toBe(testEntry.accessExpiresIn);
       // Expect that the model data was properly bound to the template.
       TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(
-        TestHelpers.getElementTextBySelector<OidcInfoDisplayComponent>(fixture, '.idTokenExpirationInfo'), 
+        TestHelpers.getElementTextBySelector<OidcInfoDisplayComponent>(fixture, '.idTokenExpirationInfo'),
         JSON.stringify(component.identityTokenExpirationInfo));
       TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(
-        TestHelpers.getElementTextBySelector<OidcInfoDisplayComponent>(fixture, '.accessTokenExpirationInfo'), 
+        TestHelpers.getElementTextBySelector<OidcInfoDisplayComponent>(fixture, '.accessTokenExpirationInfo'),
         JSON.stringify(component.accessTokenExpirationInfo));
-    })
+    });
 
     // updateExpirationInfo should have been called 6 times because we have 6 dummy data entries
     expect(updateExpirationInfoSpy).toHaveBeenCalledTimes(6);
@@ -134,11 +134,11 @@ describe('OidcInfoDisplayComponent', () => {
     const identityClaims = {
       'testKey1': 'identity test value 1',
       'testKey2': 'identity test value 2'
-    }
+    };
     const accessClaims = {
       'testKey3': 'access test value 3',
       'testKey4': 'access test value 4'
-    }
+    };
     authenticationService.idTokenClaims = identityClaims;
     authenticationService.accessTokenClaims = accessClaims;
 
@@ -152,23 +152,23 @@ describe('OidcInfoDisplayComponent', () => {
     const boundAccessTokenClaims = TestHelpers.getElementTextBySelector<OidcInfoDisplayComponent>(fixture, '.accessTokenClaims');
     TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(boundAccessTokenClaims, JSON.stringify(component.accessTokenClaims));
     TestHelpers.expectStringsToMatchIgnoringSpaceAndLineBreaks(boundIdentityClaims, JSON.stringify(component.identityTokenClaims));
-  })
+  });
 
   /* Mock up some test data to test a sequence of differing values.  It doesn't matter if this
   data is semantically accurate: we're just testing the interval and the model / template binding,
   rather than the data itself. */
   const testExpirationData = [
-    {authenticated: true, idExpDate: moment('2013-02-08 09:30:26'), idExpired: false, idExpiresIn: 3, 
+    {authenticated: true, idExpDate: moment('2013-02-08 09:30:26'), idExpired: false, idExpiresIn: 3,
       accessExpDate: moment('2014-01-01 01:30:24'), accessExpired: true, accessExpiresIn: 17 },
-    {authenticated: true, idExpDate: moment('1999-03-09 04:28:31'), idExpired: true, idExpiresIn: -1983, 
+    {authenticated: true, idExpDate: moment('1999-03-09 04:28:31'), idExpired: true, idExpiresIn: -1983,
       accessExpDate: moment('2022-12-12 02:01:03'), accessExpired: false, accessExpiresIn: -946 },
-    {authenticated: false, idExpDate: moment('1234-05-06 07:08:09'), idExpired: true, idExpiresIn: 2, 
+    {authenticated: false, idExpDate: moment('1234-05-06 07:08:09'), idExpired: true, idExpiresIn: 2,
       accessExpDate: moment('9876-01-01 09:08:13'), accessExpired: false, accessExpiresIn: 8 },
-    {authenticated: true, idExpDate: moment('2999-07-08 01:02:03'), idExpired: false, idExpiresIn: 1234, 
+    {authenticated: true, idExpDate: moment('2999-07-08 01:02:03'), idExpired: false, idExpiresIn: 1234,
       accessExpDate: moment('1941-12-07 04:05:06'), accessExpired: true, accessExpiresIn: 5678 },
-    {authenticated: false, idExpDate: null, idExpired: null, idExpiresIn: null, 
+    {authenticated: false, idExpDate: null, idExpired: null, idExpiresIn: null,
       accessExpDate: null, accessExpired: null, accessExpiresIn: null },
-    {authenticated: true, idExpDate: moment('1914-06-28 01:01:01'), idExpired: false, idExpiresIn: 1234, 
+    {authenticated: true, idExpDate: moment('1914-06-28 01:01:01'), idExpired: false, idExpiresIn: 1234,
       accessExpDate: moment('1918-11-11 23:59:59'), accessExpired: true, accessExpiresIn: 804359894 },
   ];
 });
