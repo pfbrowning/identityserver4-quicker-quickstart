@@ -1,119 +1,31 @@
-# Quickstart UI for an in-memory IdentityServer4 v2
+# IdentityServer4 Quicker Quickstart - An implementation of the Quickstart UI
 
-This repo contains an MVC based UI for login, logout and consent that supplements an IdentityServer4 configured for in-memory clients, users, and scopes. 
-Note that the repo doesn't include solution and project files, but should be copied to your project as described below.
+# Introduction
+As the name suggests, this project is an implementation of the [IdentityServer4 Quickstart UI](https://github.com/IdentityServer/IdentityServer4.Quickstart.UI) with much of the initial boilerplate and configuration already taken care of.  It's intended as an implementation of the Quickstart UI which is already functional as a demo application out-of-the-box with no configuration necessary and which can be quickly adapted for specific implementations by just providing the implementation-specific logic and configuration.
 
-**note** This branch contains the files for IdentityServer4 v2 and ASP.NET Core / MVC 2. The files for IdentityServer 1.x and ASP.NET Core 1.x can be found [on this branch](https://github.com/IdentityServer/IdentityServer4.Quickstart.UI/tree/aspnetcore1). The documentation for 1.x can be found [here](http://docs.identityserver.io/en/aspnetcore1/).
+I loosely followed [this](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) guide with a new .NET Core 2.1 web application, up to and excluding persistent grant stores and ASP.NET Core Identity, because I'm considering those to be implementation-specific details.
 
-## Issues
+# Customizations
+In addition to using .NET Core 2.1 (which is the latest as of the writing of this readme), the following boilerplate is also already implemented:
+* CORS: just add your domains to AllowedCorsOrigins in appsettings.json
+* Serilog is already implemented and configured with the console sink and rolling file sync.  Beyond that, just install and configure your favorite Serilog sinks and you're already set.
+* Integration with the [IdentityServer Demo](https://demo.identityserver.io/) as an external IDP for demo purposes.  Just swap this with your preferred external IDPs or remove it entirely if you prefer.
+* Generic ProfileService which automatically adds to the access & id token all of the claims passed by the external IDP for scopes requested by and allowed for the client (as determined by IdentityServer via context.RequestedClaimTypes).
+* A working test client configuration is provided for an Angular application (such as [OIDC Test Client](https://github.com/pfbrowning/oidc-test-client)) running on http://localhost:4200 and using implicit flow.
 
-For issues, use the [consolidated IdentityServer4 issue tracker](https://github.com/IdentityServer/IdentityServer4/issues).
+# Implementation-Specific Logic
+Following are the obvious things that you'll want to consider implementing if you're using quicker-quickstart as a starting point, based on your needs & requirements:
+* You'll probably want a persistent store for users and grants, whether you choose to use SQL Server or a different data store.  If you choose to use SQL Server with ASP.NET Core Identity, then [this](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) is a good starting point.
+* Unless you want your users to log in as Alice or Bob, you should remove the in-memory test users.
+* Implement your local login logic or disable local login on the client configuration.
+* Configure any external identity providers in Startup.cs
+* Consider implementing your own logic in ProfileService, or at the very least review what's already happening to see if it meets your needs.  This is where you would put any custom logic for retrieving user data and populating the claims for the access token and id token.
+* Configure a proper [signing credential](http://amilspage.com/signing-certificates-idsv4/) so that generated tokens aren't invalidated on each restart of your IdentityServer4 instance.
 
-## Instructions
-
-The assumption is that you started with an empty web application, added identityserver and configured the resources, clients and users. 
-
-### Adding MVC
-The quickstart UI uses MVC. Before you can add the UI you need to add the following nuget packages (these packages are not required if you're targeting ASP.NET Core 2.0 and the package `Microsoft.AspNetCore.All` is installed):
-
-```
-Microsoft.AspNetCore.Mvc
-Microsoft.AspNetCore.StaticFiles
-```
-
-...and add MVC and static files to your pipeline:
-
-```csharp
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddMvc();
-
-        // rest omitted
-    }
-
-    public void Configure(IApplicationBuilder app)
-    {
-        app.UseStaticFiles();
-
-        app.UseIdentityServer();
-
-        app.UseMvcWithDefaultRoute();
-    }
-}
-```
-
-### Adding the quickstart UI
-
-This repo contains the controllers, models, views and CSS files needed for the UI. Simply download/clone it and copy the folders into the web project.
-
-Alternatively you can run this powershell script from your web project directory to download them automatically:
-
-```
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IdentityServer/IdentityServer4.Quickstart.UI/release/get.ps1'))
-``` 
-
-Or using bash one-liner on macOS or Linux:
-
-```bash
-\curl -L https://raw.githubusercontent.com/IdentityServer/IdentityServer4.Quickstart.UI/release/get.sh | bash
-```
-
-### Adding support for external authentication
-
-You can add support for external authentication providers by adding additional authentication handlers.
-For this example we are adding support for a cloud hosted identityserver instance via the OpenID Connect protocol and Google authentication.
-
-Add the following nuget packages to your project:
-
-```
-Microsoft.AspNetCore.Authentication.OpenIdConnect
-Microsoft.AspNetCore.Authentication.Google
-```
-
-Next you need to configure the authentication handlers:
-
-```csharp
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddMvc();
-        
-        // some details omitted
-        services.AddIdentityServer();
-        
-          services.AddAuthentication()
-            .AddGoogle("Google", options =>
-            {
-                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
-                options.ClientId = "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com";
-                options.ClientSecret = "wdfPY6t8H8cecgjlxud__4Gh";
-            })
-            .AddOpenIdConnect("demoidsrv", "IdentityServer", options =>
-            {
-                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                options.SignOutScheme = IdentityServerConstants.SignoutScheme;
-
-                options.Authority = "https://demo.identityserver.io/";
-                options.ClientId = "implicit";
-                options.ResponseType = "id_token";
-                options.SaveTokens = true;
-                options.CallbackPath = new PathString("/signin-idsrv");
-                options.SignedOutCallbackPath = new PathString("/signout-callback-idsrv");
-                options.RemoteSignOutPath = new PathString("/signout-idsrv");
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = "name",
-                    RoleClaimType = "role"
-                };
-            });
-    }
-}
-```
-
-**Note** for Google authentication you need to register your local quickstart identityserver using the Google developer [console](https://console.developers.google.com). As a redirect URL, use the URL of your local identityserver and add `/signin-google`.
-If your IdentityServer is running on port 5000 - you can use the above client id/secret which is pre-registered.
+# Usage
+identityserver4-quicker-quickstart works out-of-the-box with no configuration necessary if you're using it alongside [OIDC Test Client](https://github.com/pfbrowning/oidc-test-client), although you can obviously use it for any OIDC-compliant application once configured accordingly.  In order to use it as a demo, simply do the following:
+1. Install the .NET Core 2.1 CLI, if you haven't already.
+2. Clone the repo.
+3. Modify the configuration to your liking, or just run with it as-is if you're using [OIDC Test Client](https://github.com/pfbrowning/oidc-test-client).
+3. Run `dotnet restore`, `dotnet build`, and then `dotnet run`.  Alternatively if you're using VS Code you can also use the included debuging profile to use VS Code debugging in place of `dotnet run` if you prefer.
+4. Start up and / or connect to your OpenID Connect application and initate your login via implicit flow (unless you've configured it another way).  You can use the internal login using the test users "alice" / "password" and "bob" / "password", or use the demo external login which works similarly.
