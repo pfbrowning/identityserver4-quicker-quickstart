@@ -3,10 +3,10 @@
 # Introduction
 As the name suggests, this project is an implementation of the [IdentityServer4 Quickstart UI](https://github.com/IdentityServer/IdentityServer4.Quickstart.UI) with much of the initial boilerplate and configuration already taken care of.  It's intended as an implementation of the Quickstart UI which is already functional as a demo application out-of-the-box with no configuration necessary and which can be quickly adapted for specific implementations by just providing the implementation-specific logic and configuration.
 
-I loosely followed [this](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) guide with a new .NET Core 2.1 web application, up to and excluding persistent grant stores and ASP.NET Core Identity, because I'm considering those to be implementation-specific details.
+I loosely followed [this](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) guide with a new .NET Core 2.2 web application, up to and excluding persistent grant stores and ASP.NET Core Identity, because I'm considering those to be implementation-specific details.
 
 # Customizations
-In addition to using .NET Core 2.1 (which is the latest as of the writing of this readme), the following boilerplate is also already implemented:
+In addition to using .NET Core 2.2, the following boilerplate is also already implemented:
 * CORS: just add your domains to AllowedCorsOrigins in appsettings.json
 * Serilog is already implemented and configured with the console sink and rolling file sync.  Beyond that, just install and configure your favorite Serilog sinks and you're already set.
 * Integration with the [IdentityServer Demo](https://demo.identityserver.io/) as an external IDP for demo purposes.  Just swap this with your preferred external IDPs or remove it entirely if you prefer.
@@ -24,7 +24,7 @@ Following are the obvious things that you'll want to consider implementing if yo
 
 # Usage
 identityserver4-quicker-quickstart works out-of-the-box with no configuration necessary if you're using it alongside [OIDC Test Client](https://github.com/pfbrowning/oidc-test-client), although you can obviously use it for any OIDC-compliant application once configured accordingly.  In order to use it as a demo, simply do the following:
-1. Install the .NET Core 2.1 CLI, if you haven't already.
+1. Install the .NET Core 2.2 CLI, if you haven't already.
 2. Clone the repo.
 3. Modify the configuration to your liking, or just run with it as-is if you're using [OIDC Test Client](https://github.com/pfbrowning/oidc-test-client).
 3. Run `dotnet restore`, `dotnet build`, and then `dotnet run`.  Alternatively if you're using VS Code you can also use the included debuging profile to use VS Code debugging in place of `dotnet run` if you prefer.
